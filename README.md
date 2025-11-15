@@ -228,14 +228,13 @@ This project demonstrates practical skills in:
 
 ## 🤝 Responsible Disclosure Timeline
 
-- **Day 0:** Research commenced
-- **Day 7:** Initial findings documented
-- **Day 14:** Complete assessment finished
-- **Day 15:** Private disclosure to software maintainers
-- **Day 16:** Acknowledgment received
-- **Day 90:** Public release (this repository)
+- **November 14, 2025:** Research commenced (14:00)
+- **November 15, 2025:** Complete assessment finished after 28 hours
+- **November 15, 2025:** Private disclosure to software maintainers
+- **November 15, 2025:** Acknowledgment received; disclosure respectfully declined
+- **November 16, 2025:** Public release (this repository)
 
-All findings were disclosed privately before public release.
+All findings were disclosed privately before public release. The maintainers reviewed the report and confirmed no immediate security concerns for their specific implementation.
 
 ---
 
