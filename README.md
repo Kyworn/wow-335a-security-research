@@ -112,6 +112,11 @@ wow-335a-security-research/
 │   │   ├── Makefile            # Build system
 │   │   └── README.md
 │   │
+│   ├── MemoryReader/           # Process memory dumping DLL
+│   │   ├── src/                # Source code (C)
+│   │   ├── Makefile            # Build system
+│   │   └── README.md
+│   │
 │   └── analysis-scripts/       # Python analysis tools
 │       ├── find_rc4_key.py
 │       ├── find_rc4_sbox.py
