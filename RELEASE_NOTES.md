@@ -28,7 +28,7 @@
 
 ### SHA256 Checksum
 ```
-[Will be calculated and added before release]
+c2eb720aa246ccc5eaf2dd3295df9cea896a4ac9dec8f6bb9b55f4b3254e520c
 ```
 
 Verify with:
