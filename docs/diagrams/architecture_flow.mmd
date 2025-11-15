@@ -1,0 +1,39 @@
+graph TB
+    subgraph "Game Client"
+        A[Game Logic] --> B[Network Layer]
+        B --> C[Extensions.dll]
+        C --> D[Packet Constructor]
+        D --> E[Crypto Layer]
+    end
+
+    subgraph "Crypto Layer"
+        E --> F{Auth Complete?}
+        F -->|No| G[SRP6 Handler]
+        F -->|Yes| H[RC4 Encryption]
+        G --> I[Generate Key A]
+        I --> J[Compute Session Key]
+        J --> H
+    end
+
+    subgraph "RC4 Engine"
+        H --> K[Send Context]
+        H --> L[Recv Context]
+        K --> M[Encrypt Outbound]
+        L --> N[Decrypt Inbound]
+    end
+
+    M --> O[ws2_32.dll Send]
+    O --> P((Network))
+    P --> Q[ws2_32.dll Recv]
+    Q --> N
+
+    subgraph "Ascension Server"
+        P <--> R[Server Crypto]
+        R <--> S[Game Server]
+    end
+
+    style E fill:#ff9999
+    style H fill:#99ff99
+    style K fill:#9999ff
+    style L fill:#9999ff
+    style C fill:#ffff99

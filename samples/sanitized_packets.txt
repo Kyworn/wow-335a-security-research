@@ -1,0 +1,183 @@
+# Sanitized Packet Samples
+
+## Overview
+
+These are anonymized examples of captured network packets from the WoW 3.3.5a client-server communication.
+
+**All sensitive data has been removed or randomized:**
+- Player names → Generic placeholders
+- Guild names → Removed
+- Chat messages → Removed
+- Account identifiers → Randomized
+
+---
+
+## Sample 1: Authentication Handshake (CMSG_AUTH_SESSION)
+
+```
+Direction: Client → Server
+Opcode: 0x1ED (CMSG_AUTH_SESSION)
+Size: 169 bytes
+
+Hex dump (first 64 bytes):
+00 A9 ED 01 00 00 39 33  35 00 00 00 00 00 XX XX  ......935.......
+XX XX XX XX 00 00 00 00  00 00 XX XX XX XX XX XX  ................
+XX XX XX XX XX XX XX XX  XX XX XX XX XX XX XX XX  ................
+XX XX XX XX XX XX XX XX  XX XX XX XX 00 00 00 00  ................
+
+Structure:
+[2: size] [4: opcode] [4: build] [20: account] [rest: SRP6 proof]
+
+Note: XX = sanitized bytes (SRP6 client proof A)
+```
+
+---
+
+## Sample 2: Server Auth Response (SMSG_AUTH_RESPONSE)
+
+```
+Direction: Server → Client
+Opcode: 0x1EE (SMSG_AUTH_RESPONSE)
+Size: 74 bytes
+
+Hex dump:
+00 48 EE 01 0C 00 00 00  XX XX XX XX XX XX XX XX  .H..............
+XX XX XX XX XX XX XX XX  XX XX XX XX XX XX XX XX  ................
+XX XX XX XX XX XX XX XX  XX XX XX XX XX XX XX XX  ................
+XX XX XX XX 00 00 00 00  00 00 00 00 00 00 00 00  ................
+
+Structure:
+[2: size] [2: opcode] [4: result] [32: server proof B] [rest: salt]
+
+Note: XX = sanitized (SRP6 server public key B and salt)
+```
+
+---
+
+## Sample 3: Encrypted Packet (Post-Auth)
+
+```
+Direction: Server → Client
+Encrypted: YES (RC4)
+Size: 152 bytes
+
+Hex dump (encrypted header):
+B7 4A 9F 2E D1 83 ...
+
+After RC4 decryption:
+00 96 5B 02 ...
+[2: size] [2: opcode 0x025B = SMSG_AUCTION_LIST_RESULT]
+
+Payload structure (decrypted):
+- Auction count: XX
+- Auction data: [sanitized]
+
+Note: Actual payload removed to protect game data
+```
+
+---
+
+## Sample 4: Movement Packet (CMSG_MOVE_HEARTBEAT)
+
+```
+Direction: Client → Server
+Opcode: 0xEE (CMSG_MOVE_HEARTBEAT)
+Size: 32 bytes
+
+Hex dump:
+00 1C EE 00 00 00 XX XX  XX XX XX XX XX XX XX XX  ................
+XX XX XX XX XX XX XX XX  XX XX XX XX XX XX XX XX  ................
+
+Structure:
+[2: size] [4: opcode] [4: movement flags] [4: timestamp]
+[12: position X,Y,Z] [4: orientation]
+
+Note: Coordinates sanitized
+```
+
+---
+
+## Sample 5: Ping Packet (CMSG_PING)
+
+```
+Direction: Client → Server
+Opcode: 0x1DC (CMSG_PING)
+Size: 12 bytes
+
+Hex dump:
+00 08 DC 01 00 00 XX XX  XX XX 00 00              ............
+
+Structure:
+[2: size] [4: opcode] [4: sequence] [4: latency]
+```
+
+---
+
+## Packet Statistics
+
+From captured session:
+- Total packets: 11,645
+- Unique opcodes: 369
+- Most frequent: CMSG_MOVE_* (movement packets)
+- Largest packet: ~8 KB (auction house listings)
+- Average size: 240 bytes
+
+---
+
+## Opcode Distribution (Top 10)
+
+| Opcode | Name (Guessed) | Count | Percentage |
+|--------|----------------|-------|------------|
+| 0xEE | CMSG_MOVE_HEARTBEAT | 3,241 | 27.8% |
+| 0x1DC | CMSG_PING | 892 | 7.7% |
+| 0x39 | SMSG_UPDATE_OBJECT | 671 | 5.8% |
+| 0x25B | SMSG_AUCTION_LIST | 245 | 2.1% |
+| ... | ... | ... | ... |
+
+---
+
+## Protocol Observations
+
+### Header Format
+
+**Client → Server:**
+```
+[uint16 size][uint32 opcode][payload]
+```
+
+**Server → Client:**
+```
+[uint16 size][uint16 opcode][payload]
+```
+
+### Encryption
+
+- All packets post-authentication are RC4 encrypted
+- Separate cipher contexts for send/recv
+- Header is encrypted (including size/opcode)
+
+### Session Management
+
+- SRP6 authentication establishes session key
+- RC4 initialized with 40-byte key
+- No packet sequence numbers observed
+- No integrity checks (MAC) observed
+
+---
+
+## Educational Value
+
+These samples demonstrate:
+- Binary protocol structure
+- Network packet format
+- Encryption usage (post-auth)
+- Protocol state machine
+
+For full analysis, see:
+- [Technical Analysis](../docs/TECHNICAL_ANALYSIS.md)
+- [Security Report](../docs/SECURITY_REPORT.md)
+
+---
+
+**Note:** These are sanitized examples for educational purposes only.
+Full packet captures are not included to protect game integrity.
