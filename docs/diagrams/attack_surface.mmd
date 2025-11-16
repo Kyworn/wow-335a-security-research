@@ -1,0 +1,36 @@
+graph LR
+    subgraph "Attack Vectors - ALL UNPROTECTED"
+        A[DLL Injection] -->|✅ Success| E[Game Process]
+        B[Memory Reading] -->|✅ Success| E
+        C[Function Hooking] -->|✅ Success| E
+        D[Memory Writing] -->|✅ Success| E
+    end
+
+    subgraph "Game Process Memory"
+        E --> F[Decrypted Packets]
+        E --> G[Game State]
+        E --> H[Player Data]
+        E --> I[Gold/Items]
+    end
+
+    subgraph "What's Protected"
+        J[Network Traffic] -->|🔒 RC4 Encrypted| K((Internet))
+        K -->|🔒 RC4 Encrypted| L[Server]
+    end
+
+    F -.->|Bot can read| M[AH Bot]
+    G -.->|Bot can modify| N[Speed Hack]
+    H -.->|Bot can read| O[ESP/Radar]
+    I -.->|Bot can modify| P[Gold Hack]
+
+    style A fill:#ff6666
+    style B fill:#ff6666
+    style C fill:#ff6666
+    style D fill:#ff6666
+    style E fill:#ffcccc
+    style J fill:#66ff66
+    style L fill:#66ff66
+    style M fill:#ff9999
+    style N fill:#ff9999
+    style O fill:#ff9999
+    style P fill:#ff9999

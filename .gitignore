@@ -1,0 +1,58 @@
+# Binaries (excluded from main repo - see Releases)
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Compiled Object files
+*.o
+*.obj
+*.a
+*.lib
+
+# Sensitive Data
+*.log
+*.pcap
+packets_raw.log
+memory_dumps/
+*.bin
+credentials.*
+config.ini
+
+# Personal Info
+/home/zorko/
+**/zorko/**
+
+# Large Files
+*.tar.gz
+*.zip
+samples/large_dumps/
+
+# Build artifacts
+build/
+dist/
+*.out
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Temporary
+*.tmp
+*.temp
+tmp/
+temp/

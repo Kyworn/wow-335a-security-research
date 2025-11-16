@@ -1,0 +1,56 @@
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                            THREAT MODEL                                    ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                            ║
+║  [Threat 1: Auction House Bots]                                           ║
+║  ┌────────────────────────────────────────────────────────────┐           ║
+║  │ Likelihood:  ████████████████████████ 100% (TRIVIAL)       │           ║
+║  │ Impact:      ████████████████████░░░░  85% (CRITICAL)      │           ║
+║  │ Risk Score:  ████████████████████████  92.5 / 100          │           ║
+║  └────────────────────────────────────────────────────────────┘           ║
+║  Attack Vector: Memory reading, packet injection                          ║
+║  Current Defense: NONE                                                     ║
+║  Recommendation: Implement anti-cheat (Warden-like system)                ║
+║                                                                            ║
+║  [Threat 2: Speed/Teleport Hacks]                                         ║
+║  ┌────────────────────────────────────────────────────────────┐           ║
+║  │ Likelihood:  ████████████████████████ 100% (TRIVIAL)       │           ║
+║  │ Impact:      ██████████████████░░░░░░  75% (HIGH)          │           ║
+║  │ Risk Score:  ██████████████████████░░  87.5 / 100          │           ║
+║  └────────────────────────────────────────────────────────────┘           ║
+║  Attack Vector: Memory manipulation, function hooking                     ║
+║  Current Defense: Server-side validation (INSUFFICIENT)                   ║
+║  Recommendation: Add client-side integrity checks                         ║
+║                                                                            ║
+║  [Threat 3: Packet Replay Attacks]                                        ║
+║  ┌────────────────────────────────────────────────────────────┐           ║
+║  │ Likelihood:  ████████████░░░░░░░░░░░░  50% (MODERATE)      │           ║
+║  │ Impact:      ████████████░░░░░░░░░░░░  50% (MEDIUM)        │           ║
+║  │ Risk Score:  ████████░░░░░░░░░░░░░░░░  50.0 / 100          │           ║
+║  └────────────────────────────────────────────────────────────┘           ║
+║  Attack Vector: Capture and replay encrypted packets                      ║
+║  Current Defense: Stateful RC4 (provides some protection)                 ║
+║  Recommendation: Add sequence numbers and timestamps                      ║
+║                                                                            ║
+║  [Threat 4: Man-in-the-Middle]                                            ║
+║  ┌────────────────────────────────────────────────────────────┐           ║
+║  │ Likelihood:  ████░░░░░░░░░░░░░░░░░░░░  20% (LOW)           │           ║
+║  │ Impact:      ████████████████████████  100% (CRITICAL)     │           ║
+║  │ Risk Score:  ██████████░░░░░░░░░░░░░░  60.0 / 100          │           ║
+║  └────────────────────────────────────────────────────────────┘           ║
+║  Attack Vector: Network interception, DNS hijacking                       ║
+║  Current Defense: SRP6 (good), RC4 (weak integrity)                       ║
+║  Recommendation: Add authenticated encryption (ChaCha20-Poly1305)         ║
+║                                                                            ║
+║  [Threat 5: Credential Theft]                                             ║
+║  ┌────────────────────────────────────────────────────────────┐           ║
+║  │ Likelihood:  ████░░░░░░░░░░░░░░░░░░░░  20% (LOW)           │           ║
+║  │ Impact:      ████████████████░░░░░░░░  70% (HIGH)          │           ║
+║  │ Risk Score:  ███████░░░░░░░░░░░░░░░░░  45.0 / 100          │           ║
+║  └────────────────────────────────────────────────────────────┘           ║
+║  Attack Vector: Memory dumping, keylogging                                ║
+║  Current Defense: SRP6 (password never transmitted)                       ║
+║  Recommendation: Add 2FA, monitor suspicious logins                       ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝

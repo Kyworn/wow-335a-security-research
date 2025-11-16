@@ -1,0 +1,37 @@
+sequenceDiagram
+    participant C as Client
+    participant S as Server
+
+    Note over C: Generate random 'a'<br/>(19-32 bytes)
+    Note over C: Compute A = g^a mod N
+
+    C->>S: CMSG_AUTH_SESSION<br/>Username, A
+
+    Note over S: Lookup user salt 's'<br/>and verifier 'v'
+    Note over S: Generate random 'b'
+    Note over S: Compute B = kv + g^b mod N
+
+    S->>C: SMSG_AUTH_RESPONSE<br/>B, salt 's'
+
+    Note over C: Compute x = SHA1(s | SHA1(user:pass))
+    Note over C: Compute u = SHA1(A | B)[0:4]
+    Note over C: Compute S = (B-k*g^x)^(a+u*x) mod N
+    Note over C: SessionKey = SHA1(S)[0:40]
+
+    Note over S: Compute x = SHA1(s | SHA1(user:pass))
+    Note over S: Compute u = SHA1(A | B)[0:4]
+    Note over S: Compute S = (A * v^u)^b mod N
+    Note over S: SessionKey = SHA1(S)[0:40]
+
+    Note over C,S: Both have same SessionKey!
+
+    Note over C: rc4_init(send_ctx, SessionKey, 40)
+    Note over C: rc4_init(recv_ctx, SessionKey, 40)
+
+    Note over S: rc4_init(send_ctx, SessionKey, 40)
+    Note over S: rc4_init(recv_ctx, SessionKey, 40)
+
+    C->>S: Encrypted packets
+    S->>C: Encrypted packets
+
+    Note over C,S: All traffic now encrypted
